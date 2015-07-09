@@ -14,6 +14,14 @@ BOT_NAME = 'ManagedScraper'
 SPIDER_MODULES = ['ManagedScraper.spiders']
 NEWSPIDER_MODULE = 'ManagedScraper.spiders'
 
+#ITEM_PIPELINES = {'ManagedScraper.pipelines.MetadataFilterPipeline': 100}
+DOWNLOAD_DELAY = 1
+#RANDOM_DOWNLOAD_DELAY = TRUE
+#CONCURRENT_REQUESTS = 5
+#CONCURRENT_REQUESTS_PER_IP = 1
+
+# Crawl responsibly by identifying yourself (and your website) on the user-agent
+SER_AGENT = 'ResearchSurveyCrawler (SAS)'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ManagedScraper (+http://www.yourdomain.com)'
