@@ -23,7 +23,7 @@ print 'Connected to send port'
 while 1:
 
     # keep from sending to many requests
-    time.sleep(2)
+    time.sleep(3)
 
     # send request to the managed elements rest API
     data = requests.get('http://scrapyd-3d423455-1.nocturnedesign.cont.tutum.io:6802/listjobs.json?project=ManagedScraper')

@@ -1,6 +1,8 @@
-20
+30
 1
-1
+7
 * number of pages per scrapers
 * min number of scrapers
 * max number scrapers
+
+NOTE: to cancel all spiders set min and max number of spiders to 0

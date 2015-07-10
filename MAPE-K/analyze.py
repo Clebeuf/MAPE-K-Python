@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import socket
+import math
 
 TCP_IP = '127.0.0.1'
 ANALYZE_PORT = 6002
@@ -43,8 +44,11 @@ while 1:
 
     if data:
         data = data.split(",")
-        numb_pages = int(data[0])
-        numb_spiders = int(data[1])
+        numb_pages = float(data[0])
+        numb_spiders = float(data[1])
+
+        spiders_needed = int(math.ceil(numb_pages/pages_per_spider))
+        print "spiders needed: " + str(spiders_needed)
 
         # check for max number of spiders in policy
         if (numb_spiders > max_spiders):
@@ -53,18 +57,22 @@ while 1:
         elif (numb_spiders < min_spiders):
             message = "not enough spiders"
         # check if we need to increase spiders
-        elif (numb_pages/numb_spiders) > pages_per_spider:
-            if (numb_spiders < max_spiders):
-                message = "not enough spiders"
-        # check if we need to decrease spiders
-        elif (numb_pages/numb_spiders) < pages_per_spider:
-            if (numb_spiders > min_spiders):
-                message = "too many spiders"
+        elif numb_spiders > 0:
+            if spiders_needed > numb_spiders:
+                if (numb_spiders < max_spiders):
+                    message = "not enough spiders"
+            # check if we need to decrease spiders
+            elif spiders_needed < numb_spiders:
+                if (numb_spiders > min_spiders):
+                    message = "too many spiders"
+        # kill all spiders
+        elif (max_spiders == 0) and (min_spiders == 0):
+            message = "too many spiders"
+
 
         # send request
         p.send(message)
         print "sent data:", message
-
 
 conn.close()
 p.close()

@@ -31,16 +31,20 @@ while 1:
         if data == 'decrease spiders':
             jobs = requests.get('http://scrapyd-3d423455-1.nocturnedesign.cont.tutum.io:6802/listjobs.json?project=ManagedScraper')
             jobs = json.loads(jobs.text)
-            job_id = jobs['running'][-1]['id']
-            print "killing job: " + str(job_id)
-            payload = {'project': 'ManagedScraper', 'job': job_id}
-            r = requests.post("http://scrapyd-3d423455-1.nocturnedesign.cont.tutum.io:6802/cancel.json", data=payload)
-            print(r.text)
+            try:
+                job_id = jobs['running'][-1]['id']
+                print "killing job: " + str(job_id)
+                payload = {'project': 'ManagedScraper', 'job': job_id}
+                r = requests.post("http://scrapyd-3d423455-1.nocturnedesign.cont.tutum.io:6802/cancel.json", data=payload)
+                print(r.text)
+            except IndexError:
+                pass
 
         #if recieved message to increase number of spiders
         elif data == 'increase spiders':
             payload = {'project': 'ManagedScraper', 'spider':'dmoz-spider'}
             r = requests.post("http://scrapyd-3d423455-1.nocturnedesign.cont.tutum.io:6802/schedule.json", data=payload)
+            print "add new job"
             print(r.text)
 
 conn.close()
