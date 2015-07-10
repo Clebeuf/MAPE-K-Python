@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import socket
+import requests
+import json
+import time
 
 TCP_IP = '127.0.0.1'
 MONITOR_PORT = 6001
@@ -13,27 +16,24 @@ BUFFER_SIZE = 1024
 # current number of crawlers and number of pages then 
 # passes this information to the analyzer
 
-# listen at the monitor port
-m = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-m.bind((TCP_IP, MONITOR_PORT))
-m.listen(1)
-conn, addr = m.accept()
-print 'Connected to listener port:', addr
-
 a = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 a.connect((TCP_IP, ANALYZE_PORT))
-print 'Connected to send port:', addr
+print 'Connected to send port'
 
 while 1:
 
-    data = conn.recv(BUFFER_SIZE)
+    # keep from sending to many requests
+    time.sleep(2)
 
-    if not data: 
-        pass
-    else:
-        print "received data:", data
-        a.send(data)
-        print "sent data:", data
+    # send request to the managed elements rest API
+    data = requests.get('http://scrapyd-3d423455-1.nocturnedesign.cont.tutum.io:6802/listjobs.json?project=ManagedScraper')
+    data = json.loads(data.text)
+
+    # send the data to the analyze component
+    data = "100," + str(len(data['running']))
+    print "received data:", data
+    a.send(data)
+    print "sent data:", data
 
 
 conn.close()

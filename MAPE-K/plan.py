@@ -27,9 +27,7 @@ while 1:
     
     data = conn.recv(BUFFER_SIZE)
 
-    if not data: 
-        pass
-    else:
+    if data:
         print "received data:", data
         if data == "not enough spiders":
             message = "increase spiders"

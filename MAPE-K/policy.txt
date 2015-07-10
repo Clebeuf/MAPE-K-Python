@@ -1,2 +1,6 @@
+20
 1
-40
+1
+* number of pages per scrapers
+* min number of scrapers
+* max number scrapers

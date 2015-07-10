@@ -27,31 +27,41 @@ p.connect((TCP_IP, PLAN_PORT))
 print 'Connected to send port:', addr
 
 while 1:
-    
+
     message = "do nothing"
 
     # read in current policy
     policy = open("policy.txt")
     data = policy.read().split();
-    min_spiders = int(data[0])
-    pages_per_spider = int(data[1])
+    pages_per_spider = int(data[0])
+    min_spiders = int(data[1])
+    max_spiders = int(data[2])
     policy.close()
 
     data = conn.recv(BUFFER_SIZE)
     print "received data:", data
 
-    if not data: 
-        pass
-    else:
+    if data:
         data = data.split(",")
         numb_pages = int(data[0])
         numb_spiders = int(data[1])
 
-        if (numb_pages/numb_spiders) > pages_per_spider:
+        # check for max number of spiders in policy
+        if (numb_spiders > max_spiders):
+            message = "too many spiders"
+        # check for min number of spiders in policy
+        elif (numb_spiders < min_spiders):
             message = "not enough spiders"
+        # check if we need to increase spiders
+        elif (numb_pages/numb_spiders) > pages_per_spider:
+            if (numb_spiders < max_spiders):
+                message = "not enough spiders"
+        # check if we need to decrease spiders
         elif (numb_pages/numb_spiders) < pages_per_spider:
+            if (numb_spiders > min_spiders):
                 message = "too many spiders"
 
+        # send request
         p.send(message)
         print "sent data:", message
 
