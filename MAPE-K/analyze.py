@@ -6,7 +6,6 @@ TCP_IP = '127.0.0.1'
 ANALYZE_PORT = 6002
 PLAN_PORT = 6003
 BUFFER_SIZE = 1024
-message = "do nothing"
 
 
 # ANALYZER COMPONENT
@@ -28,6 +27,8 @@ p.connect((TCP_IP, PLAN_PORT))
 print 'Connected to send port:', addr
 
 while 1:
+    
+    message = "do nothing"
 
     # read in current policy
     policy = open("policy.txt")
